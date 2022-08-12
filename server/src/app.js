@@ -7,6 +7,8 @@ import path from "path";
 dotenv.config();
 
 import postRoutes from "./routes/post-route.js";
+import commentRoutes from "./routes/comment-route.js";
+// 여기 코멘트 라우트만들어주기
 
 import { sequelize } from "./models/index.js";
 
@@ -29,6 +31,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/post", postRoutes);
+// 내가 하는데가 커멘트니까 요고 추가
+app.use("/comment", commentRoutes);
 
 app.use((req, res, next) => {
   const error = new Error(`메서드 ${req.method} 경로 ${req.url} 존재하지 않습니다.`);
