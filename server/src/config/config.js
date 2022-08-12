@@ -5,7 +5,7 @@ dotenv.config({ path: "../.env"});
 const config = {
   development: {
     username: "root",
-    password: "broccoli",
+    password: "test",
     database: "machoman",
     host: "127.0.0.1",
     dialect: "mysql",
