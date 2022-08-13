@@ -24,10 +24,20 @@ class UserController {
     try{
       const { email, nickname, password } = await userSchema.validateAsync(req.body);
       await User.create({ email, nickname, password });
-      return res.status(200).json({ message: "회원가입" });
+      return res.status(200).json(
+        {
+          success: true,
+          message: "회원가입",
+          result: {}
+        }
+      );
     }
     catch(err){
-      return res.status(400).json({err});
+      return res.status(400).json({
+        success: false,
+        message: err,
+        result: {}
+      });
     }
   };
 
@@ -37,17 +47,29 @@ class UserController {
       const { email, password } = await loginSchema.validateAsync(req.body);
       const existUser = await User.findOne({ where: { email, password }, raw: true });
 
-      if(existUser === null) return res.status(400).json({e_massege:"계정을 찾을 수 없습니다."});
+      if(existUser === null) return res.status(400).json({
+        success: false,
+        message: "없는 계정입니다",
+        result: {}
+      });
       else{
         const token = jwt.sign({ id: existUser.id }, "secretkey");
 
         res.cookie("machonam", token);
 
-        return res.status(200).json({ message: "로그인" });
+        return res.status(200).json({
+          success: true,
+          message: "로그인",
+          result: {token}
+        });
       }
     }
     catch(err){
-      return res.status(400).json({err});
+      return res.status(400).json({
+        success: false,
+        message: err,
+        result: {}
+      });
     }
   };
 
@@ -58,11 +80,23 @@ class UserController {
       await emailSchema.validateAsync(email)
       const existemail = await User.findOne({ where: { email }, raw: true });
 
-      if(existemail!==null) return res.status(400).json({e_massege:"이미 존재하는 이메일입니다"});
-      else return res.status(200).json({massege:"사용가능한 이메일입니다"});
+      if(existemail!==null) return res.status(400).json({
+        success: false,
+        message: "이미 존재하는 이메일입니다",
+        result: {}
+      });
+      else return res.status(200).json({
+        success: true,
+        message: "사용가능한 이메일입니다",
+        result: {}
+      });
     }
     catch(err){
-      return res.status(400).json({err});
+      return res.status(400).json({
+        success: false,
+        message: err,
+        result: {}
+      });
     }
   };
 
@@ -72,11 +106,23 @@ class UserController {
       const { nickname } = await nickSchema.validateAsync(req.params);
       const existnick = await User.findOne({ where: { nickname }, raw: true });
 
-      if(existnick!==null) return res.status(400).json({e_massege:"이미 존재하는 닉네임입니다"});
-      else return res.status(200).json({massege:"사용가능한 닉네임입니다"});
+      if(existnick!==null) return res.status(400).json({
+        success: false,
+        message: "이미 존재하는 닉네임입니다",
+        result: {}
+      });
+      else return res.status(200).json({
+        success: true,
+        message: "사용가능한 닉네임입니다",
+        result: {}
+      });
     }
     catch(err){
-      return res.status(400).json({err});
+      return res.status(400).json({
+        success: false,
+        message: err,
+        result: {}
+      });
     }
   };
 }
