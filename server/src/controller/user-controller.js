@@ -39,9 +39,10 @@ class UserController {
 
       if(existUser === null) return res.status(400).json({e_massege:"계정을 찾을 수 없습니다."});
       else{
-        const token = jwt.sign({ userId: existUser.userId }, "secretkey");
+        const token = jwt.sign({ id: existUser.id }, "secretkey");
 
         res.cookie("machonam", token);
+
         return res.status(200).json({ message: "로그인" });
       }
     }
