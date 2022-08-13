@@ -27,8 +27,39 @@ import sequelize from "Sequelize";
       next(error);
     }
   });
-  
-  export {commentCreate}
+
+  const commentUpdate = (async (req, res, next) => {
+    const userId = req.userId;
+    const commentId = req.params.commentId;
+    const { comment } = req.body;
+    console.log(commentId);
+    try{
+      const comment1 = await Comment.findOne({ where: {id: commentId} });
+      const update = await Comment.update({
+        comment,
+      }, { where: {id : commentId} });
+      return res.send ({ message : '수정이 될까'});
+    } catch(error){
+      console.log(error);
+      next(error);
+    };
+  });
+
+  const commentDelete = (async (req, res, next) => {
+    const userId = req.userId;
+    const commentId = req.params.commentId;
+    try{
+      const comment1 = await Comment.findOne({ where : { id: commentId} });
+      const destroy = await Comment.destroy({
+        where: {id: commentId}
+      })
+      return res.send ({ message : '난 너를 죽일거야'});
+    } catch (error){
+      console.log(error);
+      next(error);
+    }
+  });
+  export {commentCreate, commentUpdate, commentDelete}
 
 
 
