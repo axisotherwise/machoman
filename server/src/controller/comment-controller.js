@@ -7,7 +7,13 @@ import sequelize from "Sequelize";
 //  댓글 수정 /comment/:commentId 
 // 댓글 삭제 /comment/:commentId
 
+// // {
+  // success: true OR false,
+  // message: “회원가입”,
+  // result: {}
+// // }
 
+// 댓글 조회 ; ? ?
   const commentCreate = (async (req, res, next) => {
     const userId = req.userId;
     const postId = req.postId;
@@ -21,7 +27,11 @@ import sequelize from "Sequelize";
         comment,
       });
       console.log(comment1);
-      return res.send ({ message : '햇나?'});
+      return res.json ({ 
+        success: true,
+        message: "댓글 생성",
+        result: {comment1}
+      });
     } catch(error) {
       console.log(error);
       next(error);
@@ -38,7 +48,11 @@ import sequelize from "Sequelize";
       const update = await Comment.update({
         comment,
       }, { where: {id : commentId} });
-      return res.send ({ message : '수정이 될까'});
+      return res.json ({
+        success: true,
+        message: "댓글 수정",
+        result: {comment1}
+      });
     } catch(error){
       console.log(error);
       next(error);
@@ -53,7 +67,11 @@ import sequelize from "Sequelize";
       const destroy = await Comment.destroy({
         where: {id: commentId}
       })
-      return res.send ({ message : '난 너를 죽일거야'});
+      return res.json ({
+        success: true,
+        message: "댓글 삭제",
+        result: {comment1}
+      });
     } catch (error){
       console.log(error);
       next(error);
