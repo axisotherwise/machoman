@@ -7,6 +7,7 @@ import path from "path";
 dotenv.config();
 
 import postRoutes from "./routes/post-route.js";
+import userRoutes from "./routes/user-route.js";
 
 import { sequelize } from "./models/index.js";
 
@@ -29,6 +30,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/post", postRoutes);
+app.use("/user", userRoutes);
 
 app.use((req, res, next) => {
   const error = new Error(`메서드 ${req.method} 경로 ${req.url} 존재하지 않습니다.`);
