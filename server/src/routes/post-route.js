@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.get("/", postController.getPosts);
 router.get("/:postId", postController.getPost);
-router.post("/create", LoginCheck, uploadImage.single("image"), postController.createPost);
+router.post("/create", uploadImage.single("image"), postController.createPost);
 router.put("/:postId", LoginCheck, uploadImage.single("image"), postController.updatePost);
 router.delete("/:postId", LoginCheck, postController.deletePost);
 

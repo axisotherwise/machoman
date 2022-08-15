@@ -10,7 +10,7 @@ import Post from "../models/post.js";
 
     try{
       const comment1 = await Comment.create({
-        UserId: userId,
+        UserId : userId,
         PostId : postId,
         comment,
       });
