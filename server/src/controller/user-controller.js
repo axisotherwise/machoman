@@ -6,11 +6,13 @@ dotenv.config();
 
 import User from "../models/user.js";
 
+import responseHandler from "../modules/hanlder.js";
+
 const re_email = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
 const re_nickname = /^[a-zA-Z0-9]{2,15}$/;  //2~15 글자
 const re_password = /^[a-zA-Z0-9]{4,30}$/;  //4~30 글자
 
-const set_email = {email: Joi.string().pattern(re_email).required()}
+const set_email = {email: Joi.string().pattern(re_email).required()};
 const set_nickname = {nickname: Joi.string().pattern(re_nickname).required()}
 const set_password = {password: Joi.string().pattern(re_password).required()}
 
@@ -46,35 +48,25 @@ class UserController {
 
   //로그인
   login = async (req, res, next) => {                   
-    try{
-      const { email, password } = await loginSchema.validateAsync(req.body);
-      const existUser = await User.findOne({ where: { email, password }, raw: true });
-
-      if(existUser === null) return res.status(400).json({
-        success: false,
-        message: "없는 계정입니다",
-        result: {}
-      });
-      else{
-        const refreshtoken = jwt.sign({ }, process.env.REFRESH_TOKEN, { expiresIn: '3d' });
-        const accesstoken = jwt.sign({ id: existUser.id }, process.env.ACCESS_TOKEN, { expiresIn: '15m' });
-
-        res.cookie("refreshtoken", refreshtoken);
-        res.cookie("accesstoken", accesstoken);
-
-        return res.status(200).json({
-          success: true,
-          message: "로그인",
-          result: {accesstoken}
-        });
+    const { email, password } = req.body;
+    try {
+      if (!email || !password) {
+        return res.status(418).json(responseHandler(false, "Request body is not found"));
       }
-    }
-    catch(err){
-      return res.status(400).json({
-        success: false,
-        message: err,
-        result: {}
-      });
+      const user = await User.findOne({ where: { email }});
+      const token = jwt.sign(
+        {
+          userId: user.id,
+        },
+        "machoman",
+        {
+          expiresIn: "10m",
+        }
+      );
+      return res.status(200).json(responseHandler(true, "로그인 성공", token));
+    } catch (err) {
+      console.error(err);
+      next(err);
     }
   };
 
@@ -82,7 +74,7 @@ class UserController {
   check_email = async (req, res, next) => {               
     try{
       const { email } = await emailSchema.validateAsync(req.params);
-      await emailSchema.validateAsync(email)
+      await emailSchema.validateAsync(email);
       const existemail = await User.findOne({ where: { email }, raw: true });
 
       if(existemail!==null) return res.status(400).json({
