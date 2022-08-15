@@ -1,7 +1,8 @@
 import express from "express";
 const router = express.Router();
 
-import UserController from "../controller/user-controller.js"
+import UserController from "../controller/user-controller.js";
+
 
 // 로그인
 router.post("/join", UserController.join);

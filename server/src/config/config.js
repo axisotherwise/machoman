@@ -1,12 +1,15 @@
 import dotenv from "dotenv";
 
-dotenv.config({ path: "../.env"});
+dotenv.config();
 
 const config = {
   development: {
-    username: "root",
-    password: "asdfasdf",
-    database: "machoman",
+    username: process.env.DB_ID,
+    // username: 'root',
+    password: process.env.DB_PW,
+    // password: 'test',
+    database: process.env.DB,
+    // database: 'machoman',
     host: "127.0.0.1",
     dialect: "mysql",
     logging: false,
@@ -22,7 +25,7 @@ const config = {
     username: process.env.DB_ID,
     password: process.env.DB_PW,
     database: process.env.DB,
-    host: "127.0.0.1",
+    host: "3.35.123.192",
     dialect: "mysql",
     logging: false,
   },
