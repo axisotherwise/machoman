@@ -47,7 +47,7 @@ import Post from "../models/post.js";
       next(error);
     };
   });
-
+// 
 
   const commentCreate = (async (req, res, next) => {
     const userId = req.userId;
