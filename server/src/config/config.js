@@ -25,7 +25,7 @@ const config = {
     username: process.env.DB_ID,
     password: process.env.DB_PW,
     database: process.env.DB,
-    host: "127.0.0.1",
+    host: "3.35.123.192",
     dialect: "mysql",
     logging: false,
   },
