@@ -27,7 +27,7 @@ class UserController {
   //계정생성
   join = async (req, res, next) => {                    
     try{
-      const { email, nickname, password } = await userSchema.validateAsync(req.body);
+      const { email, nickname, password } = req.body; 
       await User.create({ email, nickname, password });
       return res.status(200).json(
         {
