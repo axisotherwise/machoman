@@ -1,6 +1,7 @@
 import jwt from"jsonwebtoken";
 import Joi from "joi";
 import dotenv from "dotenv";
+import bcrypt from "bcrypt";
 
 dotenv.config();
 
@@ -27,13 +28,18 @@ class UserController {
   //계정생성
   join = async (req, res, next) => {                    
     try{
-      const { email, nickname, password } = req.body; 
-      await User.create({ email, nickname, password });
+      const { email, nickname, password } = req.body;
+      const hash = await bcrypt.hash(password, 12); 
+      const user = await User.create({
+        email,
+        nickname,
+        password: hash,
+      });
       return res.status(200).json(
         {
           success: true,
-          message: "회원가입",
-          result: {}
+          message: "회원가입 성공",
+          result: user.nickname,
         }
       );
     }
@@ -54,13 +60,20 @@ class UserController {
         return res.status(418).json(responseHandler(false, "Request body is not found"));
       }
       const user = await User.findOne({ where: { email }});
+      if (!user) {
+        return res.status(418).json(responseHandler(false, "이메일을 확인해주세요.",));
+      }
+      const compare = await bcrypt.compare(password, user.password);
+      if (!compare) {
+        return res.status(418).json(responseHandler(false, "비밀번호를 확인해주세요."));
+      }
       const token = jwt.sign(
         {
           userId: user.id,
         },
         "machoman",
         {
-          expiresIn: "10m",
+          expiresIn: "1h",
         }
       );
       return res.status(200).json(responseHandler(true, "로그인 성공", token));
@@ -98,28 +111,17 @@ class UserController {
   };
 
   //닉네임 존재여부 확인
-  check_nick = async (req, res, next) => {               
-    try{
-      const { nickname } = await nickSchema.validateAsync(req.params);
-      const existnick = await User.findOne({ where: { nickname }, raw: true });
-
-      if(existnick!==null) return res.status(400).json({
-        success: false,
-        message: "이미 존재하는 닉네임입니다",
-        result: {}
-      });
-      else return res.status(200).json({
-        success: true,
-        message: "사용가능한 닉네임입니다",
-        result: {}
-      });
-    }
-    catch(err){
-      return res.status(400).json({
-        success: false,
-        message: err,
-        result: {}
-      });
+  check_nick = async (req, res, next) => {           
+    const nickname = req.params.nickname;    
+    try {
+      const result = await User.findOne({ where: { nickname }});
+      if (result) {
+        return res.status(418).json(responseHandler(false, "이미 사용중인 닉네임입니다."));
+      }
+      return res.status(418).json(responseHandler(true, "사용해도 좋은 닉네임입니다."));
+    } catch (err) {
+      console.error(err);
+      next(err);
     }
   };
 }
