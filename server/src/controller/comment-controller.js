@@ -1,10 +1,9 @@
 import express from "express";
 import Comment from "../models/comment.js";
-import sequelize from "Sequelize";
 import Post from "../models/post.js";
 
 const commentCreate = (async (req, res, next) => {
-  const userId = req.userId;
+  const userId = req.userId ? req.user.id : 1;
   const postId = req.params.postId;
   const { comment } = req.body;
 
