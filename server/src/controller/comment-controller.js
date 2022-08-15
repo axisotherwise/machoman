@@ -7,7 +7,11 @@ import Post from "../models/post.js";
 //  댓글생성하는 url /comment/create
 //  댓글 수정 /comment/:commentId 
 // 댓글 삭제 /comment/:commentId
+<<<<<<< HEAD
 // 
+=======
+
+>>>>>>> 468a19a4090d0ee5f16dd20d1bddecb448c8d436
 // // {
   // success: true OR false,
   // message: “회원가입”,
@@ -22,11 +26,14 @@ import Post from "../models/post.js";
       const test = await Comment.findAll();
       const test1 = await Comment.findOne({where: {id : commentId}})
       const created = test1.createdAt
+<<<<<<< HEAD
 
       const yearChecheck = created.getFullYear();
       const monthCheck = created.getMonth() + 1;
       const dayCheck = created.getDate();
 
+=======
+>>>>>>> 468a19a4090d0ee5f16dd20d1bddecb448c8d436
       let now = new Date();
       const caldate = now - created
       let timeCheckMin = parseInt(caldate/1000/60);
@@ -42,12 +49,18 @@ import Post from "../models/post.js";
         // console.log(timeCheckMin)
         timeCheckMin = timeCheckMin + ' 분 전'
       } 
+<<<<<<< HEAD
       else if(timeCheckMin > 1440 && timeCheckMin < 10080){
         timeCheckMin = timeCheckDay + ' 일 전'
       }
       else if (timeCheckMin > 10080){
         timeCheckMin =yearChecheck + '.' + monthCheck + '.' + dayCheck
       }
+=======
+      else if(timeCheckMin > 1440){
+        timeCheckMin = timeCheckDay + ' 일 전'
+      }
+>>>>>>> 468a19a4090d0ee5f16dd20d1bddecb448c8d436
       
       return res.json({time : timeCheckMin})
     } catch(error) {
@@ -65,7 +78,11 @@ import Post from "../models/post.js";
     // console.log({comment})
     try{
       const comment1 = await Comment.create({
+<<<<<<< HEAD
         UserId: userId,
+=======
+        UserId : userId,
+>>>>>>> 468a19a4090d0ee5f16dd20d1bddecb448c8d436
         PostId : postId,
         comment,
       });
@@ -120,7 +137,11 @@ import Post from "../models/post.js";
       next(error);
     }
   });
+<<<<<<< HEAD
   export {commentCreate, commentUpdate, commentDelete, commentFind};
+=======
+  export {commentCreate, commentUpdate, commentDelete, commentFind}
+>>>>>>> 468a19a4090d0ee5f16dd20d1bddecb448c8d436
 
 
 
