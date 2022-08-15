@@ -53,14 +53,16 @@ class UserController {
         result: {}
       });
       else{
-        const token = jwt.sign({ id: existUser.id }, "secretkey");
+        const refreshtoken = jwt.sign({ }, "refresh_secretkey", { expiresIn: '3d' });
+        const accesstoken = jwt.sign({ id: existUser.id }, "access_secretkey", { expiresIn: '1h' });
 
-        res.cookie("machonam", token);
+        res.cookie("refreshtoken", refreshtoken);
+        res.cookie("accesstoken", accesstoken);
 
         return res.status(200).json({
           success: true,
           message: "로그인",
-          result: {token}
+          result: {accesstoken}
         });
       }
     }
