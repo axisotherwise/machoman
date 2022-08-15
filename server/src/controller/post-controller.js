@@ -1,3 +1,5 @@
+import { Op } from "sequelize"; 
+
 import { sequelize } from "../models/sequelize.js";
 
 import User from "../models/user.js";
@@ -31,23 +33,28 @@ const getPosts = async (req, res, next) => {
 const getPost = async (req, res, next) => {
   const postId = req.params.postId;
   try {
-    const post = await Post.findOne({ where: { id: postId }}, {
-      include: {
+    if (!postId) {
+      return res.status(418).json(responseHandler(false, "존재하지않는 게시물입니다."));
+    }
+    const posts = await Post.findOne({
+      include: [{
         model: User,
         attributes: ["nickname"],
-      },
+      }, {
+        model: Comment,
+        attributes: ["comment"],
+        include: {
+          model: User,
+          attributes: ["nickname"],
+        }
+      }],
+      where: { id: postId },
+      attributes: ["id", "title", "image"],
     });
-    const comments = await post.getComments({
-      include: {
-        model: User,
-        attributes: ["nickname"],
-      },
-      attributes: ["id", "comment", "createdAt"],
-    });
-    return res.status(200).json(responseHandler(true, "조회 성공", {
-      post,
-      comments,
-    }));
+    if (!posts) {
+      return res.status(418).json(responseHandler(false, "존재하지않는 게시물입니다."));
+    }
+    return res.status(200).json(responseHandler(true, "조회 성공", posts));
   } catch (err) {
     console.error(err);
     return next(err);
@@ -55,7 +62,6 @@ const getPost = async (req, res, next) => {
 }; 
 
 const createPost = async (req, res, next) => {
-  console.log(req.userId);
   const userId = req.user ? req.user.id : 1;
   const { title, content } = req.body;
   const path = req.file ? `/images/${req.file.filename}` : null;
@@ -64,12 +70,47 @@ const createPost = async (req, res, next) => {
       title,
       content,
       image: path,
-      UserId: 1,
+      UserId: userId,
     });
     if (!post) {
       return res.status(418).json(responseHandler(false, "작성 실패"));
     }
     return res.status(201).json(responseHandler(true, "작성 성공", post));
+  } catch (err) {
+    console.error(err);
+    return next(err);
+  }
+};
+
+const searchPosts = async (req, res, next) => {
+  try {
+    if (!req.query.writer && !req.query.title) {
+      return res.status(418).json(responseHandler(false, "올바른 검색어를 입력해주세요."));
+    }
+    if (req.query.writer) {
+      const posts = await User.findOne({
+        include: {
+          model: Post,
+          attributes: ["title", "image"],
+        },
+        attributes: ["nickname"],
+        where: { nickname: req.query.writer },
+      });
+      return res.status(200).json(responseHandler(true, "작성자로 검색 성공", posts));
+    }
+    if (req.query.title) {
+      const posts = await Post.findAll({
+        where: {
+          title: { [Op.like]: "%" + req.query.title + "%" },
+        },
+        attributes: ["title", "image"],
+        include: {
+          model: User,
+          attributes: ["nickname"],
+        },
+      });
+      return res.status(200).json(responseHandler(true, "제목으로 검색 성공", posts));
+    }
   } catch (err) {
     console.error(err);
     return next(err);
@@ -145,4 +186,5 @@ export {
   createPost,
   updatePost,
   deletePost,
+  searchPosts,
 };

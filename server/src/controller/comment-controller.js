@@ -3,10 +3,10 @@ import Comment from "../models/comment.js";
 import sequelize from "Sequelize";
 import Post from "../models/post.js";
 
-  const commentCreate = (async (req, res, next) => {
-    const userId = req.userId;
-    const postId = req.params.postId;
-    const { comment } = req.body;
+const commentCreate = (async (req, res, next) => {
+  const userId = req.userId;
+  const postId = req.params.postId;
+  const { comment } = req.body;
 
     try{
       const comment1 = await Comment.create({
