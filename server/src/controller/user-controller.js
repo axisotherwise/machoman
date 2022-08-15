@@ -57,7 +57,7 @@ class UserController {
       });
       else{
         const refreshtoken = jwt.sign({ }, process.env.REFRESH_TOKEN, { expiresIn: '3d' });
-        const accesstoken = jwt.sign({ id: existUser.id }, process.env.ACCESS_TOKEN, { expiresIn: '1h' });
+        const accesstoken = jwt.sign({ id: existUser.id }, process.env.ACCESS_TOKEN, { expiresIn: '15m' });
 
         res.cookie("refreshtoken", refreshtoken);
         res.cookie("accesstoken", accesstoken);

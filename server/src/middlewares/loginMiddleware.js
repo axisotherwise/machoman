@@ -2,26 +2,22 @@ import jwt from "jsonwebtoken";
 import User from "../models/user.js";
 import dotenv from "dotenv";
 
+dotenv.config();
+
 const LoginCheck = async (req, res, next) => {
-  const { authorization } = req.headers;
-
-  // 로그인 해야 오쏘 생성됨
-  if (!authorization) return res.send();
-
-  const [tokenType, tokenValue] = authorization.split(" ");
-  if (tokenType !== "Bearer") {
-    
-    return res.send({ msg: "로그인 해라" });
-  }
-
+  const tokenValue = req.headers.authorization;
+  const token = tokenValue.split(" ")[1];
+  if (!token) return res.status(418).json({
+    success: false,
+    message: "토큰 없음",
+  });
   try {
-    const { userId } = jwt.verify(tokenValue, process.env.ACCESS_TOKEN);
-    const user = await User.findByPk(userId);
-    req.user = user;
+    const user = jwt.verify(token, process.env.ACCESS_TOKEN);
+    req.userId = user.id;
     next();
-  } catch (error) {
-    console.log(error);
-    return res.send({ msg: "로그인 해야 할수 있음" });
+  } catch (err) {
+    console.error(err);
+    next(err);
   }
 };
 

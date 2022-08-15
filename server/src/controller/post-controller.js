@@ -31,8 +31,12 @@ const getPosts = async (req, res, next) => {
 const getPost = async (req, res, next) => {
   const postId = req.params.postId;
   try {
-    const post = await Post.findOne({ where: { id: 3 }});
-    const user = await post.getUser();
+    const post = await Post.findOne({ where: { id: postId }}, {
+      include: {
+        model: User,
+        attributes: ["nickname"],
+      },
+    });
     const comments = await post.getComments({
       include: {
         model: User,
@@ -40,7 +44,10 @@ const getPost = async (req, res, next) => {
       },
       attributes: ["id", "comment", "createdAt"],
     });
-    return res.json(user, comments);
+    return res.status(200).json(responseHandler(true, "조회 성공", {
+      post,
+      comments,
+    }));
   } catch (err) {
     console.error(err);
     return next(err);
@@ -48,6 +55,7 @@ const getPost = async (req, res, next) => {
 }; 
 
 const createPost = async (req, res, next) => {
+  console.log(req.userId);
   const userId = req.user ? req.user.id : 1;
   const { title, content } = req.body;
   const path = req.file ? `/images/${req.file.filename}` : null;
