@@ -1,6 +1,7 @@
 import jwt from"jsonwebtoken";
 import Joi from "joi";
 import dotenv from "dotenv";
+import bcrypt from "bcrypt";
 
 dotenv.config();
 
@@ -26,7 +27,8 @@ class UserController {
   join = async (req, res, next) => {                    
     try{
       const { email, nickname, password } = await userSchema.validateAsync(req.body);
-      await User.create({ email, nickname, password });
+      const encryptedPW = bcrypt.hashSync(password, 10);
+      await User.create({ email, nickname, password:encryptedPW });
       return res.status(200).json(
         {
           success: true,
@@ -48,9 +50,11 @@ class UserController {
   login = async (req, res, next) => {                   
     try{
       const { email, password } = await loginSchema.validateAsync(req.body);
-      const existUser = await User.findOne({ where: { email, password }, raw: true });
+      const encryptedPW = await User.findOne({ where: { email }, raw: true });
+      console.log(encryptedPW.password);
+      const confirm = bcrypt.compareSync(password, encryptedPW);
 
-      if(existUser === null) return res.status(400).json({
+      if(!confirm) return res.status(400).json({
         success: false,
         message: "없는 계정입니다",
         result: {}
@@ -58,9 +62,6 @@ class UserController {
       else{
         const refreshtoken = jwt.sign({ }, process.env.REFRESH_TOKEN, { expiresIn: '3d' });
         const accesstoken = jwt.sign({ id: existUser.id }, process.env.ACCESS_TOKEN, { expiresIn: '15m' });
-
-        res.cookie("refreshtoken", refreshtoken);
-        res.cookie("accesstoken", accesstoken);
 
         return res.status(200).json({
           success: true,
