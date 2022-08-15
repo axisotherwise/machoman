@@ -32,6 +32,8 @@ const commentCreate = (async (req, res, next) => {
 
     try{
       const comment1 = await Comment.findOne({ where: {id: commentId} });
+      if(userId !== comment1.UserId) 
+      return res.send('나의 댓글이 아닙니다.')
       const update = await Comment.update({
         comment,
       }, { where: {id : commentId} });
@@ -51,6 +53,8 @@ const commentCreate = (async (req, res, next) => {
     const commentId = req.params.commentId;
     try{
       const comment1 = await Comment.findOne({ where : { id: commentId} });
+      if(userId !== comment1.UserId) 
+      return res.send('나의 댓글이 아닙니다.')
       const destroy = await Comment.destroy({
         where: {id: commentId}
       })

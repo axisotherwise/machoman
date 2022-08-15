@@ -6,9 +6,9 @@ import { LoginCheck } from "../middlewares/loginMiddleware.js";
 
 const router = express.Router();
 
-router.post('/create/:postId', controllertest.commentCreate);
-router.put('/:commentId', LoginCheck , controllertest.commentUpdate);
-router.delete('/:commentId', LoginCheck, controllertest.commentDelete);
+router.post('/create/:postId', LoginCheck, controllertest.commentCreate);
+router.put('/:commentId', LoginCheck, controllertest.commentUpdate);
+router.delete('/:commentId', LoginCheck,  controllertest.commentDelete);
 
 export default router;
 
