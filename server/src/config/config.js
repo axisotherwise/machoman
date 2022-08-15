@@ -11,7 +11,6 @@ const config = {
     database: 'new_schema',
     // database: 'machoman',
     host: 'database-1.clteqk4g9xus.ap-northeast-2.rds.amazonaws.com',
-    port: "3306",
     dialect: "mysql",
     logging: false,
   },
