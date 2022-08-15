@@ -8,7 +8,7 @@ dotenv.config();
 
 import postRoutes from "./routes/post-route.js";
 import userRoutes from "./routes/user-route.js";
-import commentRoutes from "./routes/comment-route";
+import commentRoutes from "./routes/comment-route.js";
 
 
 import { sequelize } from "./models/index.js";
