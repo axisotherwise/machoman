@@ -23,6 +23,7 @@ sequelize
   .catch(err => console.error(err));
 
 app.use(cors({
+  origin: true,
   credentials: true,
 }));
 app.use(morgan("dev"));
