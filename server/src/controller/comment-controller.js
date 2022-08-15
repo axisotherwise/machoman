@@ -57,7 +57,7 @@ import Post from "../models/post.js";
     // console.log({comment})
     try{
       const comment1 = await Comment.create({
-        UserId : userId,
+        UserId: userId,
         PostId : postId,
         comment,
       });
@@ -112,7 +112,7 @@ import Post from "../models/post.js";
       next(error);
     }
   });
-  export {commentCreate, commentUpdate, commentDelete, commentFind}
+  export {commentCreate, commentUpdate, commentDelete, commentFind};
 
 
 

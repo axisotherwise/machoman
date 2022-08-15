@@ -1,5 +1,8 @@
 import jwt from"jsonwebtoken";
 import Joi from "joi";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 import User from "../models/user.js";
 
@@ -53,8 +56,8 @@ class UserController {
         result: {}
       });
       else{
-        const refreshtoken = jwt.sign({ }, "refresh_secretkey", { expiresIn: '3d' });
-        const accesstoken = jwt.sign({ id: existUser.id }, "access_secretkey", { expiresIn: '1h' });
+        const refreshtoken = jwt.sign({ }, process.env.REFRESH_TOKEN, { expiresIn: '3d' });
+        const accesstoken = jwt.sign({ id: existUser.id }, process.env.ACCESS_TOKEN, { expiresIn: '1h' });
 
         res.cookie("refreshtoken", refreshtoken);
         res.cookie("accesstoken", accesstoken);

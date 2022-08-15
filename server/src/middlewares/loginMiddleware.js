@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
-import  User  from "../models/user.js";
+import User from "../models/user.js";
+import dotenv from "dotenv";
 
 const LoginCheck = async (req, res, next) => {
   const { authorization } = req.headers;
@@ -14,12 +15,12 @@ const LoginCheck = async (req, res, next) => {
   }
 
   try {
-    const { userId } = jwt.verify(tokenValue, 'secretkey');
+    const { userId } = jwt.verify(tokenValue, process.env.ACCESS_TOKEN);
     const user = await User.findByPk(userId);
     req.user = user;
     next();
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.send({ msg: "로그인 해야 할수 있음" });
   }
 };
