@@ -12,7 +12,7 @@ const getPosts = async (req, res, next) => {
   try {
     const [ result ] = await sequelize.query(`
       SELECT 
-        P.title, P.image,
+        P.id, P.title, P.image,
         U.nickname
       FROM post P
       JOIN user U
@@ -39,13 +39,13 @@ const getPost = async (req, res, next) => {
     const posts = await Post.findOne({
       include: [{
         model: User,
-        attributes: ["nickname"],
+        attributes: ["id", "nickname",],
       }, {
         model: Comment,
-        attributes: ["comment"],
+        attributes: ["id", "comment",],
         include: {
           model: User,
-          attributes: ["nickname"],
+          attributes: ["id", "nickname",],
         }
       }],
       where: { id: postId },
@@ -91,9 +91,9 @@ const searchPosts = async (req, res, next) => {
       const posts = await User.findOne({
         include: {
           model: Post,
-          attributes: ["title", "image"],
+          attributes: ["id", "title", "image"],
         },
-        attributes: ["nickname"],
+        attributes: ["id", "nickname"],
         where: { nickname: req.query.writer },
       });
       return res.status(200).json(responseHandler(true, "작성자로 검색 성공", posts));
@@ -103,10 +103,10 @@ const searchPosts = async (req, res, next) => {
         where: {
           title: { [Op.like]: "%" + req.query.title + "%" },
         },
-        attributes: ["title", "image"],
+        attributes: ["id", "title", "image"],
         include: {
           model: User,
-          attributes: ["nickname"],
+          attributes: ["id", "nickname"],
         },
       });
       return res.status(200).json(responseHandler(true, "제목으로 검색 성공", posts));
