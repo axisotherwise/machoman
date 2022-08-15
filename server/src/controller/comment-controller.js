@@ -22,6 +22,11 @@ import Post from "../models/post.js";
       const test = await Comment.findAll();
       const test1 = await Comment.findOne({where: {id : commentId}})
       const created = test1.createdAt
+
+      const yearChecheck = created.getFullYear();
+      const monthCheck = created.getMonth() + 1;
+      const dayCheck = created.getDate();
+
       let now = new Date();
       const caldate = now - created
       let timeCheckMin = parseInt(caldate/1000/60);
@@ -37,8 +42,11 @@ import Post from "../models/post.js";
         // console.log(timeCheckMin)
         timeCheckMin = timeCheckMin + ' 분 전'
       } 
-      else if(timeCheckMin > 1440){
+      else if(timeCheckMin > 1440 && timeCheckMin < 10080){
         timeCheckMin = timeCheckDay + ' 일 전'
+      }
+      else if (timeCheckMin > 10080){
+        timeCheckMin =yearChecheck + '.' + monthCheck + '.' + dayCheck
       }
       
       return res.json({time : timeCheckMin})
