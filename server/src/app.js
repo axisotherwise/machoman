@@ -32,7 +32,7 @@ app.use(cors({
 app.use(morgan("dev"));
 app.use("/image", express.static(path.join(__dirname, "images")));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
 app.use(passport.initialize());
 passportConfig();
 
