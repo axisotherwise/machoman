@@ -10,7 +10,12 @@ const config = {
     // password: 'test',
     database: process.env.DB,
     // database: 'machoman',
+
     host: process.env.DB_EP,
+
+    host: process.env.DB_HOST,
+    port: "3306",
+
     dialect: "mysql",
     logging: false,
   },
@@ -25,7 +30,8 @@ const config = {
     username: process.env.DB_ID,
     password: process.env.DB_PW,
     database: process.env.DB,
-    host: "database-1.clteqk4g9xus.ap-northeast-2.rds.amazonaws.com",
+    host: process.env.DB_HOST,
+    port: "3306",
     dialect: "mysql",
     logging: false,
   },
