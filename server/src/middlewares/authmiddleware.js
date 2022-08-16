@@ -36,7 +36,7 @@ export default async (req, res, next) => {
                 });
             }
             else if (decode) {                                                                      //리프레쉬 토큰이 유효 할 시
-                jwt.verify(accesstoken, "accesstoken", function (err, decode) {                     //엑세스 토큰 검증           
+                jwt.verify(accesstoken, "accesstoken", function (err, decode) {                   //엑세스 토큰 검증           
                     if (err) {                                                                      // 엑세스 토큰이 만료 됐을 시
                         const accesstoken = jwt.sign({ id }, "accesstoken", { expiresIn: '15m' });  // 엑세스 토큰 재발급
                         return res.status(200).json({
@@ -61,4 +61,5 @@ export default async (req, res, next) => {
             result: {}
         });
     }
+
 };

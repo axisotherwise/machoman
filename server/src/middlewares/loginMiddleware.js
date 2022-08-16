@@ -12,7 +12,7 @@ const LoginCheck = async (req, res, next) => {
     message: "토큰 없음",
   });
   try {
-    const user = jwt.verify(token, process.env.ACCESS_TOKEN);
+    const user = jwt.verify(token, "machoman");
     req.userId = user.id;
     next();
   } catch (err) {
