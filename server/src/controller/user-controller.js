@@ -85,28 +85,19 @@ class UserController {
 
   //이메일 존재여부 확인
   check_email = async (req, res, next) => {               
-    try{
-      const { email } = await emailSchema.validateAsync(req.params);
-      await emailSchema.validateAsync(email);
-      const existemail = await User.findOne({ where: { email }, raw: true });
-
-      if(existemail!==null) return res.status(400).json({
-        success: false,
-        message: "이미 존재하는 이메일입니다",
-        result: {}
-      });
-      else return res.status(200).json({
-        success: true,
-        message: "사용가능한 이메일입니다",
-        result: {}
-      });
+    const { email } = req.body;
+    if (!email) {
+      return res.status(418).json(responseHandler(false, "Request body is not found"));
     }
-    catch(err){
-      return res.status(400).json({
-        success: false,
-        message: err,
-        result: {}
-      });
+    try {
+      const result = await User.findOne({ where: { email }});
+      if (result) {
+        return res.status(418).json(responseHandler(false, "이미 사용중인 이메일입니다."));
+      }
+      return res.status(418).json(responseHandler(true, "사용해도 좋은 이메일입니다."));
+    } catch (err) {
+      console.error(err);
+      next(err);
     }
   };
 
