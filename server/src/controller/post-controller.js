@@ -62,7 +62,7 @@ const getPost = async (req, res, next) => {
 }; 
 
 const createPost = async (req, res, next) => {
-  const userId = req.user ? req.user.id : 1;
+  const userId = req.userId;
   const { title, content } = req.body;
   const path = req.file ? `/images/${req.file.filename}` : null;
   try {
@@ -119,10 +119,13 @@ const searchPosts = async (req, res, next) => {
 
 const updatePost = async (req, res, next) => {
   const t = await sequelize.transaction();
-  const userId = req.user ? req.user.id : 1;
+  const userId = req.userId;
   const postId = req.params.postId;
   const { title, content } = req.body;
   const path = req.file ? `/images/${req.file.filename}` : null;
+  if (!userId) {
+    return res.status(418).json(responseHandler(false, "유저 아이디가 없습니다."));
+  }
   try {
     const post = await Post.findOne({
       where: { id: postId },
@@ -155,8 +158,11 @@ const updatePost = async (req, res, next) => {
 
 const deletePost = async (req, res, next) => {
   const t = await sequelize.transaction();
-  const userId = req.user ? req.user.id : 1;
+  const userId = req.userId;
   const postId = req.params.postId;
+  if (!userId) {
+    return res.status(418).json(responseHandler(false, "유저 아이디가 없습니다."));
+  }
   try {
     const post = await Post.findOne({
       where: { id: postId },

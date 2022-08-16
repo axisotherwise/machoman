@@ -12,11 +12,16 @@ export default class User extends Sequelize.Model {
       },
       password: {
         type: Sequelize.STRING(150),
-        allowNull: false,
+        allowNull: true,
       },
       nickname: {
         type: Sequelize.STRING(20),
         allowNull: false,
+      },
+      provider: {
+        type: Sequelize.STRING(10),
+        allowNull: false,
+        defaultValue: "local",
       },
     }, {
       sequelize,

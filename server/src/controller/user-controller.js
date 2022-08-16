@@ -2,6 +2,7 @@ import jwt from"jsonwebtoken";
 import Joi from "joi";
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
+import passport from "passport";
 
 dotenv.config();
 
@@ -74,7 +75,7 @@ class UserController {
         "machoman",
         {
           expiresIn: "1h",
-        }
+        },
       );
       return res.status(200).json(responseHandler(true, "로그인 성공", token));
     } catch (err) {
@@ -94,7 +95,7 @@ class UserController {
       if (result) {
         return res.status(418).json(responseHandler(false, "이미 사용중인 이메일입니다."));
       }
-      return res.status(418).json(responseHandler(true, "사용해도 좋은 이메일입니다."));
+      return res.status(200).json(responseHandler(true, "사용해도 좋은 이메일입니다."));
     } catch (err) {
       console.error(err);
       next(err);
@@ -109,11 +110,25 @@ class UserController {
       if (result) {
         return res.status(418).json(responseHandler(false, "이미 사용중인 닉네임입니다."));
       }
-      return res.status(418).json(responseHandler(true, "사용해도 좋은 닉네임입니다."));
+      return res.status(200).json(responseHandler(true, "사용해도 좋은 닉네임입니다."));
     } catch (err) {
       console.error(err);
       next(err);
     }
   };
-}
+  
+  auth = (req, res, next) => {
+    passport.authenticate("kakao")(req, res, next);
+  };
+  
+  authCallback = () => {
+    passport.authenticate("kakao", {
+      failureRedirect: "/?error=로그인 실패",
+      session: false,
+    }, () => {
+      console.log("실행됩니다. 1");
+    })(req, res, next);
+  };
+} 
+
 export default new UserController;

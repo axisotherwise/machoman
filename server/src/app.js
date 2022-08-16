@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 import cors from "cors";
 import path from "path";
+import passport from "passport";
 
 dotenv.config();
 
@@ -11,6 +12,8 @@ import userRoutes from "./routes/user-route.js";
 import commentRoutes from "./routes/comment-route.js";
 
 import { sequelize } from "./models/index.js";
+
+import passportConfig from "./passport/index.js";
 
 const app = express();
 const __dirname = path.resolve();
@@ -30,6 +33,8 @@ app.use(morgan("dev"));
 app.use("/image", express.static(path.join(__dirname, "images")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(passport.initialize());
+passportConfig();
 
 app.use("/post", postRoutes);
 app.use("/user", userRoutes);
@@ -49,4 +54,4 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(app.get("port"), () => console.log("port"));
+app.listen(app.get("port"), () => console.log(app.get("port")));
