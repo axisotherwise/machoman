@@ -28,9 +28,10 @@ const commentCreate = (async (req, res, next) => {
     const userId = req.userId;
     const commentId = req.params.commentId;
     const { comment } = req.body;
-
+    
     try{
       const comment1 = await Comment.findOne({ where: {id: commentId} });
+      console.log(comment1)
       if(userId !== comment1.UserId) 
       return res.send('나의 댓글이 아닙니다.')
       const update = await Comment.update({
