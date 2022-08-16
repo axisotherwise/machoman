@@ -72,10 +72,10 @@ class UserController {
         {
           userId: user.id,
         },
-        "machoman",
+        process.env.TOKEN_SECRET,
         {
-          expiresIn: "1h",
-        },
+          expiresIn: "20m",
+        }
       );
       return res.status(200).json(responseHandler(true, "로그인 성공", token));
     } catch (err) {
@@ -86,7 +86,7 @@ class UserController {
 
   //이메일 존재여부 확인
   check_email = async (req, res, next) => {               
-    const { email } = req.body;
+    const  email = req.params.email;
     if (!email) {
       return res.status(418).json(responseHandler(false, "Request body is not found"));
     }
@@ -104,7 +104,7 @@ class UserController {
 
   //닉네임 존재여부 확인
   check_nick = async (req, res, next) => {           
-    const nickname = req.params.nickname;    
+    const nickname = req.params.nickname;
     try {
       const result = await User.findOne({ where: { nickname }});
       if (result) {
@@ -115,19 +115,6 @@ class UserController {
       console.error(err);
       next(err);
     }
-  };
-  
-  auth = (req, res, next) => {
-    passport.authenticate("kakao")(req, res, next);
-  };
-  
-  authCallback = () => {
-    passport.authenticate("kakao", {
-      failureRedirect: "/?error=로그인 실패",
-      session: false,
-    }, () => {
-      console.log("실행됩니다. 1");
-    })(req, res, next);
   };
 } 
 

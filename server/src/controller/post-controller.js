@@ -62,10 +62,11 @@ const getPost = async (req, res, next) => {
 }; 
 
 const createPost = async (req, res, next) => {
+  console.log("다음 라우터 실행");
   console.log(req.file);
   const userId = req.userId;
   const { title, content } = req.body;
-  const path = req.file ? `/images/${req.file.filename}` : null;
+  const path = req.file ? `/image/${req.file.filename}` : null;
   try {
     const post = await Post.create({
       title,
