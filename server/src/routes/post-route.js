@@ -20,7 +20,7 @@ router.get("/", postController.getPosts);
 router.get("/search", postController.searchPosts);
 router.get("/:postId", postController.getPost);
 router.post("/create", verifyToken, uploadImage.single("img"), postController.createPost);
-router.put("/:postId", verifyToken, uploadImage.single("image"), postController.updatePost);
+router.put("/:postId", verifyToken, uploadImage.single("img"), postController.updatePost);
 router.delete("/:postId", verifyToken, postController.deletePost);
 
 export default router;
