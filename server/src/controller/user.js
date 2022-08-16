@@ -31,7 +31,7 @@ const authCallback = async (req, res, next) => {
             expiresIn: "1h",
           },
         );
-        return res.status(200).json(responseHandler(true, "로그인 성공", token));
+        return res.cookie("token", token).redirect("/");
       });
     })(req, res, next);
   } catch (err) {

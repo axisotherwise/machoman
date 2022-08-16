@@ -6,6 +6,12 @@ dotenv.config();
 
 const LoginCheck = async (req, res, next) => {
   const tokenValue = req.headers.authorization;
+  if (!tokenValue) {
+    return res.status(418).json({
+      success: false,
+      message: "토큰 없음",
+    });
+  };
   const token = tokenValue.split(" ")[1];
   if (!token) return res.status(418).json({
     success: false,

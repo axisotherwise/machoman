@@ -62,7 +62,7 @@ const getPost = async (req, res, next) => {
 }; 
 
 const createPost = async (req, res, next) => {
-  const userId = req.userId;
+  const userId = req.userId ? req.userId : 1;
   const { title, content } = req.body;
   const path = req.file ? `/images/${req.file.filename}` : null;
   try {
