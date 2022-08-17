@@ -19,7 +19,7 @@ try {
 router.get("/", postController.getPosts);
 router.get("/search", postController.searchPosts);
 router.get("/:postId", postController.getPost);
-router.post("/create", verifyToken, uploadImage.single("image"), postController.createPost);
+router.post("/create", verifyToken, uploadImage.none(), postController.createPost);
 router.put("/:postId", verifyToken, uploadImage.single("image"), postController.updatePost);
 router.delete("/:postId", verifyToken, postController.deletePost);
 
