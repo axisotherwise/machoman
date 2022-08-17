@@ -4,6 +4,7 @@ import morgan from "morgan";
 import cors from "cors";
 import path from "path";
 import passport from "passport";
+import chalk from "chalk";
 
 dotenv.config();
 
@@ -54,4 +55,4 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(app.get("port"), () => console.log(app.get("port")));
+app.listen(app.get("port"), () => console.log(chalk.bgGreenBright(app.get("port"))));

@@ -7,7 +7,7 @@ dotenv.config({ path: "../.env" });
 const verifyToken = async (req, res, next) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
-    const result = jwt.verify(token, process.env.TOKEN_SECRET);
+    const result = await jwt.verify(token, process.env.TOKEN_SECRET);
     req.userId = result.userId;
     return next();
   } catch (err) {
