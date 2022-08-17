@@ -1,5 +1,8 @@
 import passport from "passport";
 import jwt from"jsonwebtoken";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 import responseHandler from "../modules/hanlder.js";
 
@@ -26,12 +29,12 @@ const authCallback = async (req, res, next) => {
           {
             userId: user.id,
           },
-          "machoman",
+          process.env.TOKEN_SECRET,
           {
             expiresIn: "1h",
           },
         );
-        return res.cookie("token", token).redirect("/");
+        return res.status(200).redirect(`/?token=${token}`);
       });
     })(req, res, next);
   } catch (err) {

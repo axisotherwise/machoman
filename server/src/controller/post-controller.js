@@ -62,8 +62,6 @@ const getPost = async (req, res, next) => {
 }; 
 
 const createPost = async (req, res, next) => {
-  console.log("다음 라우터 실행");
-  console.log(req.file);
   const userId = req.userId;
   const { title, content } = req.body;
   const path = req.file ? `/image/${req.file.filename}` : null;
@@ -132,7 +130,8 @@ const updatePost = async (req, res, next) => {
     const post = await Post.findOne({
       where: { id: postId },
       attributes: ["UserId"],
-    }, { transaction: t });
+      transaction: t,
+    });
     if (!post) {
       return res.status(418).json(responseHandler(false, "게시글이 존재하지 않습니다."));
     }
