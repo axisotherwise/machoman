@@ -14,7 +14,7 @@ const re_email = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-
 const re_nickname = /^[a-zA-Z0-9]{2,15}$/;  //2~15 글자
 const re_password = /^[a-zA-Z0-9]{4,30}$/;  //4~30 글자
 
-const set_email = {email: Joi.string().pattern(re_email).required()};
+const set_email = { email: Joi.string().pattern(re_email).required()};
 const set_nickname = {nickname: Joi.string().pattern(re_nickname).required()}
 const set_password = {password: Joi.string().pattern(re_password).required()}
 

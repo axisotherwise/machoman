@@ -1,5 +1,7 @@
 import Sequelize from "sequelize";
 
+import User from "./user.js";
+
 import { sequelize } from "./sequelize.js";
 
 export default class Post extends Sequelize.Model {
@@ -32,4 +34,10 @@ export default class Post extends Sequelize.Model {
     db.Post.hasMany(db.Comment);
     db.Post.belongsTo(db.User);
   }
+
+  static getPosts = async (id) => {
+    const post = await this.findOne({ where: { id }});
+    const result = await post.getUser();
+    return result;
+  };
 }

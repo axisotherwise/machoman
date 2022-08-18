@@ -12,7 +12,7 @@ const getPosts = async (req, res, next) => {
   try {
     const [ result ] = await sequelize.query(`
       SELECT 
-        P.id, P.title, P.image, P.content, P.createdAt,
+        P.id, P.title, P.image,
         U.nickname
       FROM post P
       JOIN user U

@@ -2,6 +2,9 @@ import passport from "passport";
 import jwt from"jsonwebtoken";
 import dotenv from "dotenv";
 
+import User from "../models/user.js";
+import Post from "../models/post.js";
+
 dotenv.config();
 
 import responseHandler from "../modules/hanlder.js";
@@ -43,7 +46,18 @@ const authCallback = async (req, res, next) => {
   }
 };
 
+const findEmail = async (req, res, next) => {
+  try {
+    const result = await User.getUserPosts(5);
+    res.json(result);
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+};
+
 export {
   auth,
   authCallback,
+  findEmail,
 };
