@@ -1,6 +1,36 @@
 import express from "express";
 import Comment from "../models/comment.js";
+import User from "../models/user.js";
 import Post from "../models/post.js";
+
+const commentGet = (async (req, res, next) => {
+  const postId = req.params.postId;
+  const userId = req.userId;
+  try {
+    if (!postId){
+      return res.status(400).json({
+        success: true,
+        message : '포스트아이디 null',
+        result : {}
+      });
+    }
+    const cmtpost = await Comment.findAll({
+      where: {postId : postId},
+      include: [{
+        model : User,
+        attributes: ["id", "nickname"]
+      }]
+      });
+    return res.status(200).json({
+      success : true,
+      message : '조회성공',
+      result: {cmtpost}
+    })
+  } catch (error){
+    console.error(error);
+    return next(error);
+  }
+})
 
 const commentCreate = (async (req, res, next) => {
   const userId = req.userId;
@@ -82,7 +112,7 @@ const commentCreate = (async (req, res, next) => {
     }
   });
 
-  export {commentCreate, commentUpdate, commentDelete,};
+  export {commentCreate, commentUpdate, commentDelete, commentGet};
 
 
 
