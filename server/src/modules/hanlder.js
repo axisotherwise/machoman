@@ -1,4 +1,4 @@
-export default (boolean, message, result) => {
+export default (boolean, message, ...result) => {
   return {
     success: boolean,
     message,

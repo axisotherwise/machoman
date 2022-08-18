@@ -34,7 +34,7 @@ const authCallback = async (req, res, next) => {
             expiresIn: "1h",
           },
         );
-        return res.status(200).redirect(`http://localhost:3000/?${token}`);
+        return res.status(200).redirect(`http://localhost:3000/?token=${token}`);
       });
     })(req, res, next);
   } catch (err) {

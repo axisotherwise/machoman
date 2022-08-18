@@ -74,10 +74,10 @@ class UserController {
         },
         process.env.TOKEN_SECRET,
         {
-          expiresIn: "5m",
+          expiresIn: "10m",
         }
       );
-      return res.status(200).json(responseHandler(true, "로그인 성공", token));
+      return res.status(200).json(responseHandler(true, "로그인 성공", token, user.nickname));
     } catch (err) {
       console.error(err);
       next(err);
