@@ -9,13 +9,6 @@ import { verifyToken} from "../middlewares/verify.js";
 
 const router = express.Router();
 
-try {
-  fs.readdirSync("images");
-} catch (err) {
-  console.log("images 폴더 생성");
-  fs.mkdirSync("images");
-}
-
 router.get("/", postController.getPosts);
 router.get("/search", postController.searchPosts);
 router.get("/:postId", postController.getPost);
