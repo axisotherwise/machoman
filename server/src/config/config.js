@@ -15,9 +15,12 @@ const config = {
 
     host: process.env.DB_HOST,
     port: "3306",
-
     dialect: "mysql",
     logging: false,
+    timezone: "+09:00",
+    dialectOptions: {
+      timezone: "+09:00",
+    },
   },
   test: {
     username: "root",

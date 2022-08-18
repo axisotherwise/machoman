@@ -5,7 +5,6 @@ import cors from "cors";
 import path from "path";
 import passport from "passport";
 import chalk from "chalk";
-import fs from "fs";
 
 dotenv.config();
 
@@ -31,10 +30,6 @@ app.use(cors({
   origin: true,
   credentials: true,
 }));
-app.use((req, res, next) => {
-  log.info("here");
-  next();
-});
 app.use(morgan("dev"));
 app.use("/image", express.static(path.join(__dirname, "images")));
 app.use(express.json());

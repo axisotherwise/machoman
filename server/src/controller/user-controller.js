@@ -74,7 +74,7 @@ class UserController {
         },
         process.env.TOKEN_SECRET,
         {
-          expiresIn: "1s",
+          expiresIn: "5m",
         }
       );
       return res.status(200).json(responseHandler(true, "로그인 성공", token));
